@@ -1,48 +1,49 @@
-import { Camera, CameraType } from 'expo-camera';
+
 import React, { useRef, useState, useEffect } from "react";
 import {StyleSheet, Text, View, TouchableOpacity, TextInput} from 'react-native'
-import AddTag from '../../component/add-tag'
+import AddTag from './add-tag'
 import ModifyObjInput from './modify-obj-input'
+import Gallery from '../imaging/gallery'
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
 
 // objid
-// uri
+// uris
 // tags
 // onSave
 // onCancel
 // onDelete
 export default function ModifyObjView(props) {
 
-    const [type, setType] = useState(CameraType.back);
     const [tags, setTags] = useState(props.tags);
     const [objid, setObjId] = useState(props.objid || uuidv4());
+    const [uris, setUris] = useState(props.uris);
 
     useEffect(() => {
-        props.onSave(objid, tags, props.uri)
-    }, [tags])
+        if (!objid) {
+            console.log("in modify-obj-view preventing onSave for empty objid");
+            return
+        }
+
+        props.onSave(objid, tags, uris)
+    }, [tags, uris])
 
     function onTagsChange(newTags) {
         setTags(newTags)
     }
 
+    function onURIsChange(objid, newUris) {
+        setUris(newUris)
+    }
+
     async function onSave() {
-        const photo = await mycam.takePictureAsync()
-        let uri = photo.uri;
-
-        // console.log("photo " + width + " x " + height);
-        // console.log("photo " + uri);
-
-        // let objid = props.objid || uuidv4()
-        props.onSave(objid, tags, uri)
+        props.onSave(objid, tags, uris)
         props.onCancel()
     }
 
     function onDelete() {
-        props.onDelete(props.objid)
-    }
-
-    let mycam;
+        props.onDelete(objid)
+    }    
 
     return (
         <View style={styles.container}>
@@ -51,19 +52,11 @@ export default function ModifyObjView(props) {
             </View>
 
             <View style={styles.container2}>
-                <Camera style={styles.camera} type={type} ref={(cam) => {
-                    mycam = cam;
-                }}>
-                    <View style={styles.cambuttonContainer}> 
-                    {/* <TouchableOpacity style={styles.cambutton} onPress={takePicture}> */}
-                        {/* <Text style={styles.camtext}>Take Picture</Text> */}
-                    {/* </TouchableOpacity> */}
-                    </View> 
-                </Camera> 
+                <Gallery objid={objid} uris={uris} onURIsUpdated={onURIsChange}/>
              </View>
 
             <View style={styles.container3}>
-                <AddTag isNew={!props.objid} onSave={onSave} onCancel={props.onCancel} onDelete={onDelete} />
+                <AddTag isNew={!objid} onSave={onSave} onCancel={props.onCancel} onDelete={onDelete} />
             </View>
 
         </View>
@@ -76,7 +69,7 @@ const styles = StyleSheet.create({
       flexDirection: "column",
       alignItems: 'center',
       justifyContent: 'flex-start',
-      backgroundColor:"purple",
+      backgroundColor:"#1e1c1a",
       width:"100%"
     },
 
@@ -90,14 +83,16 @@ const styles = StyleSheet.create({
       },
 
       container2: {
-        flex: 0.59,
+        flex: 0.65,
         justifyContent: 'center',
-        backgroundColor: 'yellow',
-        width:"100%"
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+        width:"100%",
+        height:"100%",
       },
 
       container3: {
-        flex: 0.25,
+        flex: 0.15,
         justifyContent: 'center',
         backgroundColor: '#444',
         width:"100%"
@@ -117,19 +112,6 @@ const styles = StyleSheet.create({
         fontSize: 40,
         width:"90%",
       },
-
-      camera: {
-        flex: 1,
-        width:"100%"
-      },
-      cambuttonContainer: {
-        flex: 1,
-        flexDirection: 'column',
-        backgroundColor: 'transparent',
-      },
-      camtext: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: 'yellow',
-      },
     })
+
+

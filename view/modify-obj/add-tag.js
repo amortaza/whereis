@@ -8,13 +8,8 @@ export default function AddTag(props) {
     return (
         <View style={styles.container_vert}>
             <View style={styles.container_horiz}>
-                <TouchableOpacity style={styles.button} onPress={props.onSave}>
-                    <Text style={styles.text}>TAKE PICTURE</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.container_horiz}>
-                <TouchableOpacity style={styles.buttonDelete} onPress={props.onDelete}>
-                    <Text style={styles.text}>DELETE</Text>
+                <TouchableOpacity style={styles.buttonDelete} onLongPress={props.onDelete}>
+                    <Text style={styles.delete_text}>DELETE ITEM</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={props.onCancel}>
                     <Text style={styles.text}>BACK</Text>
@@ -52,7 +47,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#767670",
         paddingTop: 10,
         borderRadius: 50,
-        height:50
+        height:50,
       },
 
     buttonDelete: {
@@ -60,9 +55,17 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center',
         backgroundColor: "#b90000",
-        paddingTop: 10,
+        paddingTop: 8,
         borderRadius: 50,
-        height:50
+        height:50,
+        borderWidth: 3,
+        borderColor:"yellow",
+      },
+
+      delete_text: {
+        fontSize: 18,
+        fontWeight: 'default',
+        color: 'yellow',
       },
 
       text: {

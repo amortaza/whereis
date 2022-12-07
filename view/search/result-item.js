@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, View, TouchableOpacity, TextInput} from 'react-native'
-import MyImageViewer from '../view/MyImageViewer'
+import MyImageViewer from '../imaging/MyImageViewer'
 
 // label
 // obj
@@ -18,7 +18,7 @@ export default function ResultItem(props) {
                         style={styles.image}
                         source={require('./pic1.jpg')}
                     /> */}
-                    <MyImageViewer uri={props.obj.uri}/>
+                    <MyImageViewer uri={props.obj.uris[0]}/>
                 </TouchableOpacity>
             </View>
             

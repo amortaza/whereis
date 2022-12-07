@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View, TouchableOpacity, TextInput, ProgressViewIOSComponent} from 'react-native'
-import SearchInput from './search-input'
-import SearchResults from './search-results'
-import MainAddNew from '../component/main-add-new'
+import SearchInput from '../search/search-input'
+import SearchResults from '../search/search-results'
+import MainAddNew from './main-add-new'
 
 // objs
 // onSearchInputChange
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       flexDirection: "column",
-    //   backgroundColor: 'purple',
+      backgroundColor: 'red',
       alignItems: 'center',
       justifyContent: 'flex-start',
       width:"100%"

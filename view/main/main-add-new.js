@@ -6,11 +6,11 @@ export default function MainAddNew(props) {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.button} onPress={props.onAddNew}>
-                <Text style={styles.text}>ADD NEW</Text>
+                <Text style={styles.text}>NEW ITEM</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={props.onClear}>
+            {/* <TouchableOpacity style={styles.button} onPress={props.onClear}>
                 <Text style={styles.text}>CLEAR</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     )
 }
