@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid'
 // objid
 // uris
 // tags
+// thumbnailUri
 // onSave
 // onCancel
 // onDelete
@@ -18,15 +19,16 @@ export default function ModifyObjView(props) {
     const [tags, setTags] = useState(props.tags);
     const [objid, setObjId] = useState(props.objid || uuidv4());
     const [uris, setUris] = useState(props.uris);
+    const [thumbnailUri, setThumbnailUri] = useState(props.thumbnailUri);
 
     useEffect(() => {
         if (!objid) {
-            console.log("in modify-obj-view preventing onSave for empty objid");
+            // console.log("in modify-obj-view preventing onSave for empty objid");
             return
         }
 
-        props.onSave(objid, tags, uris)
-    }, [tags, uris])
+        props.onSave(objid, tags, uris, thumbnailUri)
+    }, [tags, uris, thumbnailUri])
 
     function onTagsChange(newTags) {
         setTags(newTags)
@@ -36,8 +38,12 @@ export default function ModifyObjView(props) {
         setUris(newUris)
     }
 
+    function makeThumbnail(objid, thumbnailUri) {
+        setThumbnailUri(thumbnailUri)
+    }
+
     async function onSave() {
-        props.onSave(objid, tags, uris)
+        props.onSave(objid, tags, uris, thumbnailUri)
         props.onCancel()
     }
 
@@ -52,7 +58,7 @@ export default function ModifyObjView(props) {
             </View>
 
             <View style={styles.container2}>
-                <Gallery objid={objid} uris={uris} onURIsUpdated={onURIsChange}/>
+                <Gallery objid={objid} uris={uris} thumbnailUri={thumbnailUri} makeThumbnail={makeThumbnail} onURIsUpdated={onURIsChange}/>
              </View>
 
             <View style={styles.container3}>

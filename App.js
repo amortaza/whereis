@@ -89,14 +89,18 @@ export default function App() {
         setSearchValue(newValue)
     }
 
-    function onSave(objid, tags, uris) {
+    function onSave(objid, tags, uris, thumbnailUri) {
         let newobjs = {...objs }
 
         if (objid in newobjs && newobjs[objid].uris && !uris ) {
             uris = newobjs[objid].uris
         }
 
-        newobjs[objid]= {objid: objid, tags: tags, uris: uris} 
+        if (objid in newobjs && newobjs[objid].thumbnailUri && !thumbnailUri ) {
+            thumbnailUri = newobjs[objid].thumbnailUri
+        }
+
+        newobjs[objid]= {objid, tags, uris, thumbnailUri} 
 
         setObjs( newobjs)
         setNotifySaveToStorage(notifySaveToStorage + 1)
@@ -134,7 +138,7 @@ export default function App() {
 
                 setObjs( m )     
 
-                console.log("loaded " + JSON.stringify(m));
+                // console.log("loaded " + JSON.stringify(m));
             } 
             
             setLoadingMsg("welcome!") 
@@ -153,7 +157,7 @@ export default function App() {
     async function saveStorageData() {
         if (notifySaveToStorage == 0) return;
 
-        console.log("saving to storage " + JSON.stringify(objs));
+        // console.log("saving to storage " + JSON.stringify(objs));
 
         try {
             await AsyncStorage.setItem('_objs_', JSON.stringify(objs));
@@ -179,11 +183,11 @@ export default function App() {
 
         } else if (page == "new") {
 
-            rendered = <ModifyObjView uris={[]} tags={searchValue} onSave={onSave}  onCancel={onCancel} onDelete={onDelete} />
+            rendered = <ModifyObjView uris={[]} tags={searchValue} thumbnailUri={""} onSave={onSave}  onCancel={onCancel} onDelete={onDelete} />
 
         }else if (page == "modify") {
 
-            rendered = <ModifyObjView objid={obj.objid} uris={obj.uris} tags={obj.tags} onSave={onSave}  onCancel={onCancel} onDelete={onDelete} />
+            rendered = <ModifyObjView objid={obj.objid} uris={obj.uris} tags={obj.tags} thumbnailUri={obj.thumbnailUri} onSave={onSave}  onCancel={onCancel} onDelete={onDelete} />
         }
     }
 

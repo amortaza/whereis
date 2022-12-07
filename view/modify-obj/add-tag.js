@@ -58,8 +58,9 @@ const styles = StyleSheet.create({
         paddingTop: 8,
         borderRadius: 50,
         height:50,
-        borderWidth: 3,
+        borderWidth: 2,
         borderColor:"yellow",
+        opacity:0.7
       },
 
       delete_text: {

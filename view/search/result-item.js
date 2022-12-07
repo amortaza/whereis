@@ -18,7 +18,7 @@ export default function ResultItem(props) {
                         style={styles.image}
                         source={require('./pic1.jpg')}
                     /> */}
-                    <MyImageViewer uri={props.obj.uris[0]}/>
+                    <MyImageViewer uri={props.obj.thumbnailUri || props.obj.uris[0]}/>
                 </TouchableOpacity>
             </View>
             

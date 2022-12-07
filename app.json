@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "WhereIs",
-    "slug": "WhereIs",
+    "slug": "whereis",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,6 +29,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c7d8df61-9e2c-47d8-8368-dc4255b35f47"
+      }
+    },
+    "owner": "mrcool2"
   }
 }

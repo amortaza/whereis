@@ -6,35 +6,27 @@ import {Image,TouchableOpacity, FlatList, ImageBackground, StyleSheet, Text, Vie
 
 // objid
 // uris
-// onURIsUpdated
+// thumbnailUri
+// onURIsUpdated(objid, uris)
+// makeThumbnail(objid, uri)
 export default function Gallery(props) {
 
-    
-
-    // const [urisplus, setUrisPlus] = useState([]);
     const [uris, setUris] = useState(props.uris);
+    const [thumbnailUri, setThumbnailUri] = useState(props.thumbnailUri);
     const [showCamera, setShowCamera] = useState(false);
     const [type, setType] = useState(CameraType.back);
 
     let mycam;
 
-    // useEffect(() => {
-    //     setUris( [...props.uris] )
-    // }, [props.uris])
-
-    // useEffect(() => {
-    //     let plus = [...uris]
-    //     plus.unshift("new")
-
-    //     setUrisPlus(plus)
-
-    //     console.log("***** gallery uris is " + JSON.stringify(uris));
-    // }, [uris])
-
     useEffect(() => {
         // console.log("******** gallery onURIsUpdated " + JSON.stringify(uris));
         props.onURIsUpdated( props.objid, uris )
     }, [uris])
+
+    useEffect(() => {
+        console.log("******** gallery makeThumbnail " + JSON.stringify(thumbnailUri));
+        props.makeThumbnail( props.objid, thumbnailUri )
+    }, [thumbnailUri])
 
     useEffect(() => {
         if (uris.length == 0) setShowCamera(true)
@@ -71,6 +63,21 @@ export default function Gallery(props) {
         setShowCamera(false)
     }
 
+    const renderButton = (uri) => {
+        if (uri == thumbnailUri) {
+            return (<TouchableOpacity disabled={true} style={{...styles.image_display_button, opacity:0.34 }}>
+                <Text style={styles.image_display_text}>THUMBNAIL</Text>
+            </TouchableOpacity>
+            )
+        } 
+        
+        return (
+            <TouchableOpacity style={styles.image_display_button} onPress={() => {setThumbnailUri(uri)}}>
+                <Text style={styles.image_display_text}>THUMBNAIL</Text>
+            </TouchableOpacity>
+        )        
+    };
+
     // todo keep uri image proportions
     const renderItem = ({item}) => (
             <ImageBackground
@@ -88,6 +95,9 @@ export default function Gallery(props) {
                     <TouchableOpacity style={styles.image_delete_button} onLongPress={() => {deleteImage(item)}}>
                         <Text style={styles.image_delete_text}>DELETE</Text>
                     </TouchableOpacity>
+
+                    {renderButton(item)}
+
                 </View>
             </ImageBackground>
     );
@@ -150,13 +160,13 @@ const styles = StyleSheet.create({
       button_add_pic: {
         flex: 1,
         alignSelf: 'center',
-        alignItems: 'center',
-        backgroundColor: "#41ab91",
+        alignItems: 'center',        
         paddingTop: 7,
         borderRadius: 50,
         width:200,
         height:50,
         marginBottom: 20,
+        backgroundColor: "#41ab91",
         borderWidth:3,
         borderColor: "#b1fbf1"
       },
@@ -186,7 +196,7 @@ const styles = StyleSheet.create({
 
 
     image_delete_container: {
-        flex: 0.22,
+        flex: 0.39,
         flexDirection: "column",
         backgroundColor: 'transparent',
         alignItems: 'flex-start',
@@ -194,12 +204,13 @@ const styles = StyleSheet.create({
         // borderColor:"yellow",
         // borderWidth:2,
         marginRight:10,
-        marginBottom:20,
+        // marginBottom:20,
+        gap:10
         // width:"50%",  
       },  
       image_delete_button: {
         flex: 0.5,
-        alignSelf: 'center',
+        alignSelf: 'flex-end',
         alignItems: 'center',
         backgroundColor: "#b90000",
         paddingTop: 4,
@@ -207,8 +218,30 @@ const styles = StyleSheet.create({
         width:100,
         borderColor:"yellow",
         borderWidth:2,
+        marginBottom:20,
+        opacity:0.81
       },
 
+      image_display_button: {
+        flex: 0.5,
+        alignSelf: 'center',
+        alignItems: 'center',
+        paddingTop: 4,
+        borderRadius: 50,
+        width:130,
+        borderWidth:2,
+        marginBottom:20,
+        backgroundColor: "#41ab91",
+        borderWidth:3,
+        borderColor: "#b1fbf1",
+        opacity:0.95
+      },
+
+      image_display_text: {
+        fontSize: 15,
+        fontWeight: 'default',
+        color: '#fff',
+      },
       image_delete_text: {
         fontSize: 15,
         fontWeight: 'default',
