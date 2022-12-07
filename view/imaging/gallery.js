@@ -9,7 +9,9 @@ import {Image,TouchableOpacity, FlatList, ImageBackground, StyleSheet, Text, Vie
 // onURIsUpdated
 export default function Gallery(props) {
 
-    const [urisplus, setUrisPlus] = useState([]);
+    
+
+    // const [urisplus, setUrisPlus] = useState([]);
     const [uris, setUris] = useState(props.uris);
     const [showCamera, setShowCamera] = useState(false);
     const [type, setType] = useState(CameraType.back);
@@ -20,17 +22,17 @@ export default function Gallery(props) {
     //     setUris( [...props.uris] )
     // }, [props.uris])
 
+    // useEffect(() => {
+    //     let plus = [...uris]
+    //     plus.unshift("new")
+
+    //     setUrisPlus(plus)
+
+    //     console.log("***** gallery uris is " + JSON.stringify(uris));
+    // }, [uris])
+
     useEffect(() => {
-        let plus = [...uris]
-        plus.unshift("new")
-
-        setUrisPlus(plus)
-
-        console.log("***** gallery uris is " + JSON.stringify(uris));
-    }, [uris])
-
-    useEffect(() => {
-        console.log("******** gallery onURIsUpdated " + JSON.stringify(uris));
+        // console.log("******** gallery onURIsUpdated " + JSON.stringify(uris));
         props.onURIsUpdated( props.objid, uris )
     }, [uris])
 
@@ -38,13 +40,21 @@ export default function Gallery(props) {
         if (uris.length == 0) setShowCamera(true)
     }, [uris])
 
-    // todo delete file
-    function deleteImage(uri) {
+    async function deleteImage(uri) {
         let newuris = uris.filter((test) => {
             return test != uri;
         })
 
         setUris(newuris)
+
+        // let RNFS = require("react-native-fs")
+        // let exists = await RNFS.exists(uri)
+        // if (exists) {
+        //     console.log("exists!");
+        //     await RNFS.unlink(uri)
+        // } else {
+        //     console.log("does not exist");
+        // }
     }
 
     async function onTakePicture() {
@@ -63,33 +73,23 @@ export default function Gallery(props) {
 
     // todo keep uri image proportions
     const renderItem = ({item}) => (
-        (item == "new" ? 
-            <View style={styles.new_image_container}>
-                <TouchableOpacity style={styles.button_add_pic} onPress={() => {setShowCamera(true)}}>
-                    <Text style={styles.text}>ADD PICTURE</Text>
-                </TouchableOpacity>
-
-            </View>
-            
-            :
             <ImageBackground
-            source={{uri: item}}
-            style={{
-                flex: 1,
-                width:300,
-                height:300,
-                borderWidth:3,
-                borderColor: "#ddd",
-                justifyContent: "flex-end",
-                alignItems: 'flex-end',
-            }}> 
+                source={{uri: item}}
+                style={{
+                    flex: 1,
+                    width:300,
+                    height:300,
+                    borderWidth:3,
+                    borderColor: "#ddd",
+                    justifyContent: "flex-end",
+                    alignItems: 'flex-end',
+                }}> 
                 <View style={styles.image_delete_container}>
                     <TouchableOpacity style={styles.image_delete_button} onLongPress={() => {deleteImage(item)}}>
                         <Text style={styles.image_delete_text}>DELETE</Text>
                     </TouchableOpacity>
                 </View>
             </ImageBackground>
-        )        
     );
 
     return (
@@ -105,25 +105,48 @@ export default function Gallery(props) {
                     </View> 
             </Camera>  
         :
-        <FlatList
-            data={urisplus}
-            renderItem={renderItem}
-            keyExtractor={uri => uri}
-        />)
+        <>
+            <View style={styles.ace}>
+                <View style={styles.new_image_container}>
+                    <TouchableOpacity style={styles.button_add_pic} onPress={() => {setShowCamera(true)}}>
+                        <Text style={styles.text}>ADD PICTURE</Text>
+                    </TouchableOpacity>
+
+                </View>
+                <FlatList style={styles.flatlist}
+                    data={uris}
+                    renderItem={renderItem}
+                    keyExtractor={uri => uri}
+                />
+            </View>
+        </>
+        )
     )
 }
 
 const styles = StyleSheet.create({
-    new_image_container: {
+    ace: {
         flex: 1,
         flexDirection: "column",
         backgroundColor: 'transparent',
         alignItems: 'center',
         justifyContent: 'center',
         width:"100%",  
+        height:"100%"
         // borderWidth:10,
         // borderColor:"yellow"
       },  
+    flatlist: {
+        flex: 1,
+    },  
+
+    new_image_container: {
+        flex: 0.2,
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },  
+
       button_add_pic: {
         flex: 1,
         alignSelf: 'center',
