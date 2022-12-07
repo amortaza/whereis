@@ -24,12 +24,20 @@ export default function Gallery(props) {
     }, [uris])
 
     useEffect(() => {
-        console.log("******** gallery makeThumbnail " + JSON.stringify(thumbnailUri));
+        // console.log("******** gallery makeThumbnail " + JSON.stringify(thumbnailUri));
         props.makeThumbnail( props.objid, thumbnailUri )
     }, [thumbnailUri])
 
     useEffect(() => {
         if (uris.length == 0) setShowCamera(true)
+    }, [uris])
+
+    useEffect(() => {
+        // console.log("uris changed and thumbnail is " + thumbnailUri);
+        if (uris.length != 0 && !thumbnailUri) {
+            console.log("useeffect uris -> set thumbnail to " + uris[0]);
+            setThumbnailUri(uris[0])
+        }
     }, [uris])
 
     async function deleteImage(uri) {
@@ -39,6 +47,18 @@ export default function Gallery(props) {
 
         setUris(newuris)
 
+        if (newuris.length == 0) {
+            // console.log("image deleted clearing thumbnail");
+            setThumbnailUri("")
+        }
+
+        if (newuris.length > 0 && thumbnailUri == uri) {
+            // console.log("image deleted SETTING thumbnail");
+            setThumbnailUri(newuris[0])
+        }
+
+        // FileSystem.deleteAsync(uri, {idempotent: true})
+        
         // let RNFS = require("react-native-fs")
         // let exists = await RNFS.exists(uri)
         // if (exists) {
@@ -64,12 +84,18 @@ export default function Gallery(props) {
     }
 
     const renderButton = (uri) => {
+        // console.log("comparing 1 " + uri);
+        // console.log("comparing 2 " + thumbnailUri);
+        
         if (uri == thumbnailUri) {
+            // console.log("should be disabled");
             return (<TouchableOpacity disabled={true} style={{...styles.image_display_button, opacity:0.34 }}>
                 <Text style={styles.image_display_text}>THUMBNAIL</Text>
             </TouchableOpacity>
             )
         } 
+
+        // console.log("should be enabled");
         
         return (
             <TouchableOpacity style={styles.image_display_button} onPress={() => {setThumbnailUri(uri)}}>

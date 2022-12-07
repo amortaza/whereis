@@ -96,9 +96,9 @@ export default function App() {
             uris = newobjs[objid].uris
         }
 
-        if (objid in newobjs && newobjs[objid].thumbnailUri && !thumbnailUri ) {
-            thumbnailUri = newobjs[objid].thumbnailUri
-        }
+        // if (objid in newobjs && newobjs[objid].thumbnailUri && !thumbnailUri ) {
+        //     thumbnailUri = newobjs[objid].thumbnailUri
+        // }
 
         newobjs[objid]= {objid, tags, uris, thumbnailUri} 
 

@@ -27,6 +27,7 @@ export default function ModifyObjView(props) {
             return
         }
 
+        // console.log("calling papa with thumbnail " + thumbnailUri);
         props.onSave(objid, tags, uris, thumbnailUri)
     }, [tags, uris, thumbnailUri])
 
@@ -39,6 +40,7 @@ export default function ModifyObjView(props) {
     }
 
     function makeThumbnail(objid, thumbnailUri) {
+        // console.log("modifyobj - makethumbnail");
         setThumbnailUri(thumbnailUri)
     }
 
