@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
       width:"100%"
     },
     container1: {
-      flex: 0.25,
+      flex: 0.28,
       width:"100%"
     },
     container2: {
@@ -47,6 +47,8 @@ const styles = StyleSheet.create({
     container3: {
       flex: 0.16,
       width:"100%",
-      backgroundColor:"#444"
+      backgroundColor:"#444",
+      borderTopWidth:1,
+      borderTopColor:"white",
     },
   })

@@ -2,6 +2,7 @@
 import { Camera, CameraType } from 'expo-camera';
 import React, { useRef, useState, useEffect } from "react";
 import {Image,TouchableOpacity, FlatList, ImageBackground, StyleSheet, Text, View}  from 'react-native'
+import CameraControls from './camera-controls'
 // todo on delete delete the actual image files
 
 // objid
@@ -9,12 +10,14 @@ import {Image,TouchableOpacity, FlatList, ImageBackground, StyleSheet, Text, Vie
 // thumbnailUri
 // onURIsUpdated(objid, uris)
 // makeThumbnail(objid, uri)
+// onCameraStatusChange(bool)
 export default function Gallery(props) {
 
     const [uris, setUris] = useState(props.uris);
     const [thumbnailUri, setThumbnailUri] = useState(props.thumbnailUri);
     const [showCamera, setShowCamera] = useState(false);
     const [type, setType] = useState(CameraType.back);
+    const [msg, setMsg] = useState("");
 
     let mycam;
 
@@ -33,9 +36,13 @@ export default function Gallery(props) {
     }, [uris])
 
     useEffect(() => {
+        props.onCameraStatusChange( showCamera );
+    }, [showCamera])
+
+    useEffect(() => {
         // console.log("uris changed and thumbnail is " + thumbnailUri);
         if (uris.length != 0 && !thumbnailUri) {
-            console.log("useeffect uris -> set thumbnail to " + uris[0]);
+            // console.log("useeffect uris -> set thumbnail to " + uris[0]);
             setThumbnailUri(uris[0])
         }
     }, [uris])
@@ -69,7 +76,7 @@ export default function Gallery(props) {
         // }
     }
 
-    async function onTakePicture() {
+    async function onOneAndDone() {
         if (!mycam) {
             // todo do a proper alert
             console.log("mycam was null, cannot take picture");
@@ -80,6 +87,31 @@ export default function Gallery(props) {
         let uri = photo.uri;
 
         setUris( [uri, ...uris])
+        setShowCamera(false)
+    }
+
+    async function onOneAndStay() {
+        if (!mycam) {
+            // todo do a proper alert
+            console.log("mycam was null, cannot take picture");
+            return
+        }
+
+        setMsg("please wait...")
+        // const photo = await mycam.takePictureAsync()
+
+        mycam.takePictureAsync({}).then((photo) => {
+            let uri = photo.uri;
+            setUris( [uri, ...uris])
+
+            setMsg("image added successfully")
+            setTimeout(() => {
+                setMsg("")
+            }, 5000)
+        })
+    }
+
+    async function onDone() {
         setShowCamera(false)
     }
 
@@ -112,8 +144,8 @@ export default function Gallery(props) {
                     flex: 1,
                     width:300,
                     height:300,
-                    borderWidth:3,
-                    borderColor: "#ddd",
+                    borderTopWidth:1,
+                    borderTopColor: "#ddd",
                     justifyContent: "flex-end",
                     alignItems: 'flex-end',
                 }}> 
@@ -130,16 +162,19 @@ export default function Gallery(props) {
 
     return (
         (showCamera ?
+            <>
+            <Text style={{...styles.msg, opacity:0.7}}>camera icon for taking multiple pictures</Text>
+            <Text style={styles.msg}>{msg}</Text>
             <Camera style={styles.camera} type={type} ref={(cam) => {mycam = cam;}}>
                 <View style={styles.cambuttonContainer}> 
-                        <TouchableOpacity style={styles.cambutton} onPress={() => {
-                            onTakePicture()                            
-                        }}> 
-                        {/* <Text style={styles.camtext}>Take Picture</Text>  */}
-                        <Image source={require('../../assets/camera.png')} />
+                        <TouchableOpacity style={styles.cambutton} onPress={onOneAndStay}> 
+                            <Image source={require('../../assets/camera3.png')} />
                         </TouchableOpacity> 
                     </View> 
             </Camera>  
+
+            <CameraControls onDone={onDone} onOneAndDone={onOneAndDone} />
+            </>
         :
         <>
             <View style={styles.ace}>
@@ -201,23 +236,38 @@ const styles = StyleSheet.create({
         fontWeight: 'default',
         color: '#eee',
       },
+
+
+
+
       camera: {
         flex: 1,
-        width:"100%"
+        width:"100%",
+        height:"100%",
+
       },
       cambuttonContainer: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: 'transparent',
+        // backgroundColor: 'white',
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent:"flex-end",
-        padding:40
+        paddingBottom:10
       },
       camtext: {
-        fontSize: 24,
-        fontWeight: 'bold',
+        fontSize: 20,
+        fontWeight: 'default',
         color: 'yellow',
+      },
+
+    cambutton: {
+        fontSize: 20,
+        fontWeight: 'default',
+        color: 'yellow',
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent:"center",
       },
 
 
@@ -269,6 +319,11 @@ const styles = StyleSheet.create({
         color: '#fff',
       },
       image_delete_text: {
+        fontSize: 15,
+        fontWeight: 'default',
+        color: 'yellow',
+      },
+      msg: {
         fontSize: 15,
         fontWeight: 'default',
         color: 'yellow',

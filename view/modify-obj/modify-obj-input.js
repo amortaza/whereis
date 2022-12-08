@@ -15,10 +15,6 @@ export default function ModifyObjInput(props) {
     return (
         
         <View style={styles.container}>
-            {/* <Text style={styles.text}>
-                Enter tags
-            </Text> */}
-
             <TextInput
                 style={styles.input}
                 onChangeText={onChangeText}
@@ -45,13 +41,12 @@ const styles = StyleSheet.create({
     input: {
         height: 88,
         margin: 12,
-        borderWidth: 1,
         padding: 10,
         fontSize: 25,
         width:"90%",
         backgroundColor: "#767670",
         color:"#eee",
-        borderWidth:3,
-        borderColor:"#aaa"
+        borderWidth:1,
+        borderColor:"#eee"
 },
   })

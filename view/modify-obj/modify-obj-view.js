@@ -6,6 +6,7 @@ import ModifyObjInput from './modify-obj-input'
 import Gallery from '../imaging/gallery'
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
+import { WhiteBalance } from "expo-camera";
 
 // objid
 // uris
@@ -20,6 +21,7 @@ export default function ModifyObjView(props) {
     const [objid, setObjId] = useState(props.objid || uuidv4());
     const [uris, setUris] = useState(props.uris);
     const [thumbnailUri, setThumbnailUri] = useState(props.thumbnailUri);
+    const [page, setPage] = useState("main"); // main, camera
 
     useEffect(() => {
         if (!objid) {
@@ -51,22 +53,43 @@ export default function ModifyObjView(props) {
 
     function onDelete() {
         props.onDelete(objid)
-    }    
+    } 
+    
+    function onCameraStatusChange(status) {
+        if (status) {
+            setPage("camera")
+        } else {
+            setPage("main")
+        }
+    }
+
+    let controls = null
+    let cameraFlex = 0.65
+
+    if (page == "main") {
+        controls = (
+            <View style={styles.container3}>
+                <AddTag isNew={!objid} onSave={onSave} onCancel={props.onCancel} onDelete={onDelete} />
+            </View>
+        )
+
+    } else {
+        cameraFlex = 0.77 // 78
+    }
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container}>            
+
             <View style={styles.container1}>
                 <ModifyObjInput inputVal={tags} onChange={onTagsChange} />
             </View>
 
-            <View style={styles.container2}>
-                <Gallery objid={objid} uris={uris} thumbnailUri={thumbnailUri} makeThumbnail={makeThumbnail} onURIsUpdated={onURIsChange}/>
-             </View>
-
-            <View style={styles.container3}>
-                <AddTag isNew={!objid} onSave={onSave} onCancel={props.onCancel} onDelete={onDelete} />
+            <View style={{...styles.container2, flex: cameraFlex}}>
+                <Gallery objid={objid} uris={uris} thumbnailUri={thumbnailUri} makeThumbnail={makeThumbnail} onURIsUpdated={onURIsChange} onCameraStatusChange={onCameraStatusChange}/>
             </View>
 
+            {controls}
+            
         </View>
     )
 }
@@ -91,7 +114,7 @@ const styles = StyleSheet.create({
       },
 
       container2: {
-        flex: 0.65,
+        // cameraFlex overwrites this -> flex: .65,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'transparent',
@@ -100,10 +123,12 @@ const styles = StyleSheet.create({
       },
 
       container3: {
-        flex: 0.15,
+        flex: 0.13, // 13
         justifyContent: 'center',
         backgroundColor: '#444',
-        width:"100%"
+        width:"100%",
+        borderTopColor:"white",
+        borderTopWidth:1
       },
 
       text: {

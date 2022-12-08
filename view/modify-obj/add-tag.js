@@ -4,16 +4,20 @@ import {StyleSheet, Text, View, TouchableOpacity, TextInput, ProgressViewIOSComp
 // onSave
 // onCancel
 // onDelete
+// setShowCamera
 export default function AddTag(props) {
     return (
         <View style={styles.container_vert}>
             <View style={styles.container_horiz}>
-                <TouchableOpacity style={styles.buttonDelete} onLongPress={props.onDelete}>
-                    <Text style={styles.delete_text}>DELETE ITEM</Text>
-                </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={props.onCancel}>
                     <Text style={styles.text}>BACK</Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonDelete} onLongPress={props.onDelete}>
+                    <Text style={styles.delete_text}>DELETE ITEM</Text>
+                </TouchableOpacity>
+                {/* <TouchableOpacity style={styles.button_add_pic} onPress={() => {props.setShowCamera(true)}}>
+                        <Text style={styles.text}>ADD PICTURE</Text>
+                </TouchableOpacity> */}
             </View>
         </View>
     )
@@ -73,5 +77,18 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'default',
         color: '#eee',
+      },
+      button_add_pic: {
+        flex: 1,
+        alignSelf: 'center',
+        alignItems: 'center',        
+        paddingTop: 7,
+        borderRadius: 50,
+        width:200,
+        height:50,
+        marginBottom: 20,
+        backgroundColor: "#41ab91",
+        borderWidth:3,
+        borderColor: "#b1fbf1"
       },
   })

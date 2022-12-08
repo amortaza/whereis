@@ -9,15 +9,10 @@ export default function ResultItem(props) {
         <View style={styles.container}>
             
             <View style={styles.c1}>
-            
                 <Text style={styles.text}>
                     {props.label}
                 </Text>
                 <TouchableOpacity onPress={() => {props.onModify(props.obj)}}>
-                    {/* <Image
-                        style={styles.image}
-                        source={require('./pic1.jpg')}
-                    /> */}
                     <MyImageViewer uri={props.obj.thumbnailUri || props.obj.uris[0]}/>
                 </TouchableOpacity>
             </View>
@@ -35,6 +30,7 @@ const styles = StyleSheet.create({
       width:"100%",
       height:120,
       marginBottom: 10,
+
     },
 
     c1: {
@@ -43,6 +39,8 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'flex-end',
       backgroundColor:"#1e1c1a",
+      borderBottomWidth:1,
+      borderBottomColor:"white",
     },
 
     image: {
