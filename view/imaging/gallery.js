@@ -16,7 +16,6 @@ export default function Gallery(props) {
     const [uris, setUris] = useState(props.uris);
     const [thumbnailUri, setThumbnailUri] = useState(props.thumbnailUri);
     const [showCamera, setShowCamera] = useState(false);
-    const [type, setType] = useState(CameraType.back);
     const [msg, setMsg] = useState("");
 
     let mycam;
@@ -83,8 +82,10 @@ export default function Gallery(props) {
             return
         }
 
-        const photo = await mycam.takePictureAsync()
+        const photo = await mycam.takePictureAsync({base64:false, skipProcessing:false, quality:0})
         let uri = photo.uri;
+
+        // console.log(JSON.stringify(photo));
 
         setUris( [uri, ...uris])
         setShowCamera(false)
@@ -100,7 +101,8 @@ export default function Gallery(props) {
         setMsg("please wait...")
         // const photo = await mycam.takePictureAsync()
 
-        mycam.takePictureAsync({}).then((photo) => {
+        mycam.takePictureAsync({base64:false, skipProcessing:false, quality:0}).then((photo) => {
+            // console.log(JSON.stringify(photo));
             let uri = photo.uri;
             setUris( [uri, ...uris])
 
@@ -163,12 +165,12 @@ export default function Gallery(props) {
     return (
         (showCamera ?
             <>
-            <Text style={{...styles.msg, opacity:0.7}}>camera icon for taking multiple pictures</Text>
-            <Text style={styles.msg}>{msg}</Text>
-            <Camera style={styles.camera} type={type} ref={(cam) => {mycam = cam;}}>
+            <Text style={{...styles.msg, opacity:1}}>use camera icon for taking multiple pictures</Text>
+            <Text style={styles.msg2}>{msg}</Text>
+            <Camera style={styles.camera} type={CameraType.back} ref={(cam) => {mycam = cam;}}>
                 <View style={styles.cambuttonContainer}> 
                         <TouchableOpacity style={styles.cambutton} onPress={onOneAndStay}> 
-                            <Image source={require('../../assets/camera3.png')} />
+                            <Image style={{width:104,height:90,opacity:0.7}}source={require('../../assets/camera4.png')} />
                         </TouchableOpacity> 
                     </View> 
             </Camera>  
@@ -253,7 +255,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent:"flex-end",
-        paddingBottom:10
+        paddingBottom:40
       },
       camtext: {
         fontSize: 20,
@@ -324,6 +326,11 @@ const styles = StyleSheet.create({
         color: 'yellow',
       },
       msg: {
+        fontSize: 14,
+        fontWeight: 'default',
+        color: '#b1fbf1',
+      },
+      msg2: {
         fontSize: 15,
         fontWeight: 'default',
         color: 'yellow',

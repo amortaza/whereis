@@ -145,7 +145,7 @@ export default function App() {
 
             setTimeout(() => {
                 setLoadingDb(false)
-            }, 2000)                   
+            }, 500)                   
 
         } catch (error) {
             setLoadingMsg("error " + error)
