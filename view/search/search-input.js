@@ -19,6 +19,11 @@ export default function SearchInput(props) {
                 value={searchValue}
                 placeholder="where is?"
             />
+
+            <TouchableOpacity style={styles.button} onPress={() => {setSearchValue("")}}>
+                <Text style={styles.text}>CLEAR</Text>
+            </TouchableOpacity>
+
         </View>
     )
 }
@@ -27,7 +32,7 @@ export default function SearchInput(props) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      flexDirection: "column",
+      flexDirection: "row",
       alignItems: 'center',
       justifyContent: 'flex-start',
       paddingTop: 30,
@@ -37,8 +42,12 @@ const styles = StyleSheet.create({
     },
 
     input: {
+        flex: 0.74,
         height: 55,
-        margin: 12,        
+        marginLeft: 12,        
+        marginTop: 12,        
+        marginBottom: 12,        
+        marginRight: 6,        
         padding: 10,
         fontSize: 24,
         width:"90%",
@@ -48,4 +57,20 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor:"#eee"
       },
+
+      button: {
+        flex: 0.24,
+        alignSelf: 'center',
+        alignItems: 'center',
+        backgroundColor: "#767670",
+        padding: 4,
+        borderRadius: 50
+      },
+
+      text: {
+        fontSize: 15,
+        fontWeight: 'default',
+        color: '#eee',
+      },
+
   })
