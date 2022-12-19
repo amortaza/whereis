@@ -75,34 +75,17 @@ export default function Gallery(props) {
         // }
     }
 
-    async function onOneAndDone() {
+    async function takePhoto() {
         if (!mycam) {
             // todo do a proper alert
             console.log("mycam was null, cannot take picture");
-            return
-        }
-
-        const photo = await mycam.takePictureAsync({base64:false, skipProcessing:false, quality:0})
-        let uri = photo.uri;
-
-        // console.log(JSON.stringify(photo));
-
-        setUris( [uri, ...uris])
-        setShowCamera(false)
-    }
-
-    async function onOneAndStay() {
-        if (!mycam) {
-            // todo do a proper alert
-            console.log("mycam was null, cannot take picture");
-            return
+            return false
         }
 
         setMsg("please wait...")
-        // const photo = await mycam.takePictureAsync()
 
-        mycam.takePictureAsync({base64:false, skipProcessing:false, quality:0}).then((photo) => {
-            // console.log(JSON.stringify(photo));
+        mycam.takePictureAsync({base64:true, skipProcessing:true, quality:0}).then((photo) => {
+            // console.log("with quality 1: " + photo.base64.length/1000);
             let uri = photo.uri;
             setUris( [uri, ...uris])
 
@@ -111,6 +94,17 @@ export default function Gallery(props) {
                 setMsg("")
             }, 5000)
         })
+
+        return true
+    }
+
+    async function onOneAndDone() {
+        if (!takePhoto()) return
+        setShowCamera(false)
+    }
+
+    async function onOneAndStay() {
+        takePhoto()
     }
 
     async function onDone() {
