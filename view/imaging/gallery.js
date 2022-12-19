@@ -17,6 +17,7 @@ export default function Gallery(props) {
     const [thumbnailUri, setThumbnailUri] = useState(props.thumbnailUri);
     const [showCamera, setShowCamera] = useState(false);
     const [msg, setMsg] = useState("");
+    const [disableCameraButton, setDisableCameraButton] = useState(false);
 
     let mycam;
 
@@ -75,36 +76,61 @@ export default function Gallery(props) {
         // }
     }
 
-    async function takePhoto() {
+    async function onOneAndDone() {
         if (!mycam) {
             // todo do a proper alert
-            console.log("mycam was null, cannot take picture");
+            console.log("mycam was null, cannot take photo");
             return false
         }
 
         setMsg("please wait...")
+        setDisableCameraButton(true)
 
         mycam.takePictureAsync({base64:true, skipProcessing:true, quality:0}).then((photo) => {
             // console.log("with quality 1: " + photo.base64.length/1000);
             let uri = photo.uri;
             setUris( [uri, ...uris])
 
-            setMsg("image added successfully")
+            setMsg("photo added successfully")            
+
             setTimeout(() => {
                 setMsg("")
             }, 5000)
+
+            setTimeout(() => {
+                setShowCamera(false)                
+            }, 1000)
+
+            setTimeout(() => {
+                setDisableCameraButton(false)
+            }, 1500)
         })
-
-        return true
-    }
-
-    async function onOneAndDone() {
-        if (!takePhoto()) return
-        setShowCamera(false)
     }
 
     async function onOneAndStay() {
-        takePhoto()
+        if (!mycam) {
+            // todo do a proper alert
+            console.log("mycam was null, cannot take photo");
+            return false
+        }
+
+        setMsg("please wait...")
+        setDisableCameraButton(true)
+
+        mycam.takePictureAsync({base64:true, skipProcessing:true, quality:0}).then((photo) => {
+            // console.log("with quality 1: " + photo.base64.length/1000);
+            let uri = photo.uri;
+            setUris( [uri, ...uris])
+
+            setMsg("photo added successfully")
+            setTimeout(() => {
+                setMsg("")
+            }, 5000)
+            
+            setTimeout(() => {
+                setDisableCameraButton(false)
+            }, 200)
+        })
     }
 
     async function onDone() {
@@ -156,20 +182,45 @@ export default function Gallery(props) {
             </ImageBackground>
     );
 
+    let cameraButton
+
+    if (disableCameraButton) {
+        cameraButton =  <TouchableOpacity style={styles.cambutton}> 
+                            <Image style={{width:104,height:90,opacity:0.1}}source={require('../../assets/camera4.png')} />
+                        </TouchableOpacity> 
+    } else {
+        cameraButton =  <TouchableOpacity style={styles.cambutton} onPress={onOneAndStay}> 
+                            <Image style={{width:104,height:90,opacity:0.7}}source={require('../../assets/camera4.png')} />
+                        </TouchableOpacity> 
+    }
+
     return (
         (showCamera ?
             <>
-            <Text style={{...styles.msg, opacity:1}}>use camera icon for taking multiple pictures</Text>
-            <Text style={styles.msg2}>{msg}</Text>
-            <Camera style={styles.camera} type={CameraType.back} ref={(cam) => {mycam = cam;}}>
-                <View style={styles.cambuttonContainer}> 
-                        <TouchableOpacity style={styles.cambutton} onPress={onOneAndStay}> 
-                            <Image style={{width:104,height:90,opacity:0.7}}source={require('../../assets/camera4.png')} />
-                        </TouchableOpacity> 
-                    </View> 
-            </Camera>  
+                <View style={styles.msg_container}>
+                    <View style={styles.wow}>
+                        <Text style={{...styles.msg, opacity:1}}>
+                            use 
+                        </Text>
 
-            <CameraControls onDone={onDone} onOneAndDone={onOneAndDone} />
+                        <Image style={{width:35,height:30, opacity:0.85, marginLeft:5, marginRight:5}} source={require('../../assets/camera4.png')} /> 
+
+                        <Text style={{...styles.msg, opacity:1}}>
+                            to take multiple photos
+                        </Text>
+                    </View>
+
+                    <Text style={styles.msg2}>{msg}</Text>
+
+                </View>
+
+                <Camera style={styles.camera} type={CameraType.back} ref={(cam) => {mycam = cam;}}>
+                    <View style={styles.cambuttonContainer}> 
+                            {cameraButton}
+                        </View> 
+                </Camera>  
+
+                <CameraControls onDone={onDone} onOneAndDone={onOneAndDone} disableCameraButton={disableCameraButton} />
             </>
         :
         <>
@@ -192,6 +243,23 @@ export default function Gallery(props) {
 }
 
 const styles = StyleSheet.create({
+    wow: {
+        flex: 0.8,
+        flexDirection: "row",
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        width:"100%",  
+      },  
+    msg_container: {
+        flex: 0.2,
+        flexDirection: "column",
+        backgroundColor: 'transparent',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        width:"100%",  
+        paddingLeft:15,
+      },  
     ace: {
         flex: 1,
         flexDirection: "column",
@@ -326,14 +394,15 @@ const styles = StyleSheet.create({
         color: 'yellow',
       },
       msg: {
-        fontSize: 14,
+        fontSize: 19,
         fontWeight: 'default',
         color: '#b1fbf1',
       },
       msg2: {
-        fontSize: 15,
+        fontSize: 17,
         fontWeight: 'default',
         color: 'yellow',
+        
       },
 
     })

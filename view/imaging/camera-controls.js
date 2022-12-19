@@ -2,17 +2,28 @@ import {StyleSheet, Text, View, TouchableOpacity, TextInput, ProgressViewIOSComp
 
 // onDone
 // onOneAndDone
+// disableCameraButton
 export default function CameraControls(props) {
+    let cameraButton
+
+    if (props.disableCameraButton) {
+        cameraButton =  <TouchableOpacity style={styles.buttonOne}>
+                            <Text style={styles.text_one}>PROCESSING...</Text>
+                        </TouchableOpacity>
+
+    } else {
+        cameraButton =  <TouchableOpacity style={styles.buttonOne} onPress={props.onOneAndDone}>
+                            <Text style={styles.text_one}>TAKE ONE PHOTO</Text>
+                        </TouchableOpacity>
+    }
+
     return (
         <View style={styles.container}>
-            {/* <View style={styles.container_horiz}> */}
-                <TouchableOpacity style={styles.buttonDone} onPress={props.onDone}>
-                    <Text style={styles.text_done}>DONE</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonOne} onPress={props.onOneAndDone}>
-                    <Text style={styles.text_one}>ONE 'N DONE</Text>
-                </TouchableOpacity>
-            {/* </View> */}
+            <TouchableOpacity style={styles.buttonDone} onPress={props.onDone}>
+                <Text style={styles.text_done}>DONE</Text>
+            </TouchableOpacity>
+
+            {cameraButton}
         </View>
     )
 }
@@ -34,7 +45,7 @@ const styles = StyleSheet.create({
     },
 
     buttonDone: {
-        flex: 1,
+        flex: 0.8,
         alignSelf: 'center',
         alignItems: 'center',
         backgroundColor: "#767670",
@@ -45,12 +56,13 @@ const styles = StyleSheet.create({
       },
 
       buttonOne: {
-        flex: 1.5,
+        flex: 1.7,
         alignSelf: 'center',
         alignItems: 'center',
         paddingTop: 8,
         borderRadius: 50,
         height:50,
+        marginLeft:10,
 
         backgroundColor: "#41ab91",
         borderWidth:3,
