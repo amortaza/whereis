@@ -20,7 +20,10 @@ export default function SearchInput(props) {
                 placeholder="where is?"
             />
 
-            <TouchableOpacity style={styles.button} onPress={() => {setSearchValue("")}}>
+            <TouchableOpacity style={styles.button} onPress={() => {
+                    setSearchValue("")
+                    props.onChange("")
+                }}>
                 <Text style={styles.text}>CLEAR</Text>
             </TouchableOpacity>
 
