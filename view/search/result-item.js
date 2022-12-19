@@ -4,6 +4,20 @@ import MyImageViewer from '../imaging/MyImageViewer'
 // label
 // obj
 export default function ResultItem(props) {
+    let thumbnailUri = props.obj.thumbnailUri
+
+    if (!thumbnailUri && props.obj.uris && props.obj.uris.length > 0) {
+        thumbnailUri = props.obj.uris[0]
+    }
+
+    let img
+
+    if (thumbnailUri) {
+        img = <MyImageViewer uri={thumbnailUri}/>
+    } else {
+        img = <Text style={styles.no_image_text}>{"<no image>"}</Text>
+    }
+
     return (
         
         <View style={styles.container}>
@@ -13,7 +27,7 @@ export default function ResultItem(props) {
                     {props.label}
                 </Text>
                 <TouchableOpacity onPress={() => {props.onModify(props.obj)}}>
-                    <MyImageViewer uri={props.obj.thumbnailUri || props.obj.uris[0]}/>
+                    {img}
                 </TouchableOpacity>
             </View>
             
@@ -53,5 +67,13 @@ const styles = StyleSheet.create({
         fontWeight: 'default',
         color: '#f8e0e2',
         marginRight:20,
+    },
+
+    no_image_text: {
+        fontSize: 17,
+        fontWeight: 'default',
+        color: 'yellow',
+        marginRight:8,
+        marginLeft:12
     },
   })

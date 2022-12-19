@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     },
 
     container1: {
-        flex: 0.25,
+        flex: 0.18,
         flexDirection: "column",
         alignItems: 'center',
         justifyContent: 'center',

@@ -100,6 +100,8 @@ export default function App() {
         //     thumbnailUri = newobjs[objid].thumbnailUri
         // }
 
+        if (!tags) tags = "None"
+
         newobjs[objid]= {objid, tags, uris, thumbnailUri} 
 
         setObjs( newobjs)

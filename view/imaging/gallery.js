@@ -176,7 +176,7 @@ export default function Gallery(props) {
             <View style={styles.ace}>
                 <View style={styles.new_image_container}>
                     <TouchableOpacity style={styles.button_add_pic} onPress={() => {setShowCamera(true)}}>
-                        <Text style={styles.text}>ADD PICTURE</Text>
+                        <Text style={styles.add_button_text}>ADD PICTURE</Text>
                     </TouchableOpacity>
 
                 </View>
@@ -218,17 +218,23 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'center',
         alignItems: 'center',        
-        paddingTop: 7,
+        paddingTop: 2,
         borderRadius: 50,
         width:200,
         height:50,
-        marginBottom: 20,
+        marginTop: 18,
+        marginBottom: 18,
         backgroundColor: "#41ab91",
         borderWidth:3,
         borderColor: "#b1fbf1"
       },
       text: {
         fontSize: 18,
+        fontWeight: 'default',
+        color: '#eee',
+      },
+      add_button_text: {
+        fontSize: 17,
         fontWeight: 'default',
         color: '#eee',
       },

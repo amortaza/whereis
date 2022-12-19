@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       flexDirection: "column",
-      backgroundColor: '#1e1c1a',
+      backgroundColor:"#444",
       alignItems: 'center',
       justifyContent: 'flex-start',
       paddingTop: 30,
@@ -39,14 +39,14 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        height: 88,
+        height: 55,
         margin: 12,
         padding: 10,
-        fontSize: 25,
+        fontSize: 24,
         width:"90%",
         backgroundColor: "#767670",
         color:"#eee",
         borderWidth:1,
-        borderColor:"#eee"
+        borderColor:"#ddd"
 },
   })
