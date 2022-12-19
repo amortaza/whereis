@@ -23,9 +23,11 @@ export default function ResultItem(props) {
         <View style={styles.container}>
             
             <View style={styles.c1}>
-                <Text style={styles.text}>
-                    {props.label}
-                </Text>
+                <TouchableOpacity onPress={() => {props.onModify(props.obj)}}>
+                    <Text style={styles.text}>
+                        {props.label}
+                    </Text>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => {props.onModify(props.obj)}}>
                     {img}
                 </TouchableOpacity>
