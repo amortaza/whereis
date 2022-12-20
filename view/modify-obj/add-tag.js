@@ -10,14 +10,11 @@ export default function AddTag(props) {
         <View style={styles.container_vert}>
             <View style={styles.container_horiz}>
                 <TouchableOpacity style={styles.button} onPress={props.onCancel}>
-                    <Text style={styles.text}>BACK</Text>
+                    <Text style={styles.text}>DONE</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonDelete} onLongPress={props.onDelete}>
                     <Text style={styles.delete_text}>DELETE ITEM</Text>
                 </TouchableOpacity>
-                {/* <TouchableOpacity style={styles.button_add_pic} onPress={() => {props.setShowCamera(true)}}>
-                        <Text style={styles.text}>ADD PICTURE</Text>
-                </TouchableOpacity> */}
             </View>
         </View>
     )

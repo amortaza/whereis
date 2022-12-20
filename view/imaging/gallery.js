@@ -135,7 +135,7 @@ export default function Gallery(props) {
 
     async function onDone() {
         setShowCamera(false)
-    }
+}
 
     const renderButton = (uri) => {
         // console.log("comparing 1 " + uri);
@@ -227,7 +227,7 @@ export default function Gallery(props) {
             <View style={styles.ace}>
                 <View style={styles.new_image_container}>
                     <TouchableOpacity style={styles.button_add_pic} onPress={() => {setShowCamera(true)}}>
-                        <Text style={styles.add_button_text}>ADD PICTURE</Text>
+                        <Text style={styles.add_button_text}>ADD PHOTO</Text>
                     </TouchableOpacity>
 
                 </View>
